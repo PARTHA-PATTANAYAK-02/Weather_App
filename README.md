@@ -82,7 +82,7 @@ npm run dev
 
 ## ✍️ Author
 
-# Made with ❤️ by Partha Pattanayak
+### Made with ❤️ by Partha Pattanayak
 
 - 🔗[Github](https://github.com/PARTHA-PATTANAYAK-02)
 - 🔗[LinkedIn](https://www.linkedin.com/in/partha-pattanayak-082a46320/)
