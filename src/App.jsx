@@ -308,6 +308,7 @@ const App = () => {
               <FiSearch className="absolute right-3 top-3.5 text-gray-400" />
             </div>
             <button
+              title="Search"
               type="submit"
               className="px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
             >
@@ -332,7 +333,7 @@ const App = () => {
         {/* Unit Toggle */}
         <div className="flex justify-between mb-4">
           <button
-            title="theme"
+            title="Theme"
             className={`p-2 text-1xl border-1 rounded-full cursor-pointer transition hover:rotate-[-90deg] active:scale-75 ${
               darkMode
                 ? " border-gray-200 text-white"
@@ -343,6 +344,7 @@ const App = () => {
             {darkMode ? <IoSunnyOutline /> : <IoMoonOutline />}
           </button>
           <button
+            title="Change unit"
             onClick={handleUnitChange}
             className="px-3 py-1 cursor-pointer bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
           >
