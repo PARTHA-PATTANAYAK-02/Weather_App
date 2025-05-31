@@ -39,6 +39,7 @@ const App = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [darkMode, setDarkMode] = useState(() => {
     try {
       const storedMode = localStorage.getItem("darkMode");
@@ -54,7 +55,6 @@ const App = () => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer); // cleanup on unmount
   }, []);
-
   // API key should be in your environment variables
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
   useEffect(() => {
@@ -74,7 +74,6 @@ const App = () => {
       if (!response.ok) {
         throw new Error("Location not found. Please try another search.");
       }
-
       const data = await response.json();
       setWeatherData(data);
     } catch (err) {
@@ -83,16 +82,33 @@ const App = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
   // Get current location on first load
   useEffect(() => {
-    location ? fetchWeather(location, unit) : fetchWeather("Kolkata", unit);
-  }, [unit]);
+    if (isOnline) {
+      location ? fetchWeather(location, unit) : fetchWeather("Kolkata", unit);
+    } else {
+      setError("No internet connection");
+    }
+  }, [unit, isOnline]);
 
   // Handle search
   const handleSearch = (e) => {
     e.preventDefault();
     if (location.trim()) {
-      fetchWeather(location, unit);
+      isOnline
+        ? fetchWeather(location, unit)
+        : setError("No internet connection");
     }
   };
 
@@ -243,7 +259,7 @@ const App = () => {
   };
 
   // Loading state
-  if (loading || !weatherData) {
+  if (loading) {
     return (
       <div
         className={`flex items-center justify-center min-h-screen ${
